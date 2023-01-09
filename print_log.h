@@ -1,4 +1,4 @@
-#ifndef TEST_COMMON_H
+#ifndef PRINT_LOG_H
 #define PRINT_LOG_H
 
 #include <string>
