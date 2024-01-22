@@ -108,6 +108,7 @@ void find_vertical_words(struct v_result_words *p_vrw) {
                 target_col++;
             }
         }
+		p_vrw->result[target_row][target_col] = ',';
     }
 }
 
