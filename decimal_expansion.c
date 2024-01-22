@@ -22,17 +22,17 @@ void get_decimal_expansion(int *arr, int devident, int devisor, int decimal_plac
         devident *= 10;
     }
 
-    double d10 = (double)devident / (double)devisor;
+    double d10 = (double)devident / devisor;
     int mod = devident % devisor;
-    int den = ((devident - mod) / devisor);
-    arr[decimal_place-1] = den;
-    double next_decimal = d10 - den;
-    // = [devident / devisor - den]
+    int int_part = ((devident - mod) / devisor);
+    arr[decimal_place-1] = int_part;
+    double next_decimal = d10 - int_part;
+    // = [devident / devisor - int_part]
     // = [devident / devisor - ((devident - mod) / devisor)]
     // = mod / devisor
     // = devident % devisor / devisor
     double next_decimal1 = (devident % devisor) / (double)devisor;
-    // printf("devident:%d, devisor:%d, mod: %d, d10:%f, decimal_place:%d, den:%d, next_decimal:%f, next_decimal1:%f\n", devident, devisor, mod, d10, decimal_place, den, next_decimal, next_decimal1);
+    // printf("devident:%d, devisor:%d, mod: %d, d10:%f, decimal_place:%d, int_part:%d, next_decimal:%f, next_decimal1:%f\n", devident, devisor, mod, d10, decimal_place, int_part, next_decimal, next_decimal1);
     // printf("next_devident:%d, next_devisor:%d\n", (devident % devisor), devisor);
     get_decimal_expansion(arr, (devident % devisor), devisor, (decimal_place + 1), limit);
 }
