@@ -58,13 +58,13 @@ void find_horizonal_words(struct h_result_words *p_hrw) {
     
     int i, j;
     for (i = 1; i < row; i += 2) {
-        int result_row = ((i + 1)/2 - 1);
+        int target_row = ((i + 1)/2 - 1);
         for (j = 1; j < column; j += 3) {
             if (word_puzzle[i][j] != '*') {
-                p_hrw->result[result_row][j] = word_puzzle[i][j];
-                p_hrw->result[result_row][j+1] = word_puzzle[i][j+1];
+                p_hrw->result[target_row][j] = word_puzzle[i][j];
+                p_hrw->result[target_row][j+1] = word_puzzle[i][j+1];
             } else {
-                p_hrw->result[result_row][j] = ',';
+                p_hrw->result[target_row][j] = ',';
             }
         }
     }
@@ -100,7 +100,7 @@ void find_vertical_words(struct v_result_words *p_vrw) {
                 // printf("column:%d, row:%d, target_row:%d, target_col:%d, char:%c%c\n", j, i, target_row, target_col, word_puzzle[i][j], word_puzzle[i][j+1]);
                 p_vrw->result[target_row][target_col] = word_puzzle[i][j];
                 target_col++;
-                p_vrw->result[target_row][target_col+1] = word_puzzle[i][j+1];
+                p_vrw->result[target_row][target_col] = word_puzzle[i][j+1];
                 target_col++;
             } else {
                 // printf(",\n");
