@@ -18,6 +18,9 @@ void get_decimal_expansion(int *arr, int devident, int devisor, int decimal_plac
         return;
     }
     
+    while (devident > devisor) {
+        devident = devident % devisor;
+    }
     devident = 10 * devident;
 
     int i = 0;
@@ -46,11 +49,13 @@ void get_decimal_expansion(int *arr, int devident, int devisor, int decimal_plac
 }
 
 struct decimal_details {
+    int begins_at;
     int cycle_length[25];
     int cycle_decimals[25][100];
 };
 
 void print_decimal_details(struct decimal_details * p_decimal_details) {
+    printf("begins_at: %d\n", p_decimal_details->begins_at);
     int i, j;
     for(i = 0; i < 25; i++) {
         if (p_decimal_details->cycle_length[i] == 0) {
@@ -74,45 +79,51 @@ int check_all_elements_equal(const int * a, int n) {
 
 void get_decimal_details(const int * p_decimal_expansion, int size, struct decimal_details * p_decimal_details) {
     int max_cycle_length = size / 2;
-    int cycle_length, i, j, count = 0, prefix_zero_count = 0;
+    int cycle_length, b, i, j, count = 0, prefix_zero_count = 0;
     int should_quit = 0;
     for (cycle_length = 1; cycle_length < max_cycle_length; cycle_length++) {
-        for (i = 0, j = i + cycle_length; i < cycle_length, j < 2 * cycle_length; i++, j++) {
-            if (p_decimal_expansion[i] == 0) {
-                prefix_zero_count++;
-                continue;
-            }
-            if (p_decimal_expansion[i] == p_decimal_expansion[j]) {
-                int all_equals = check_all_elements_equal(&p_decimal_expansion[i], max_cycle_length - i);
-                if (all_equals == 0) {
-                    // printf("cycle_length:%d, i: %d, j: %d, all equals!\n", cycle_length, i, j);
-                    p_decimal_details->cycle_decimals[count][p_decimal_details->cycle_length[count]] = p_decimal_expansion[i];
-                    p_decimal_details->cycle_length[count] = 1;
-                    count++;
-                    should_quit = 1;
-                    break;
-                }
-                if (p_decimal_details->cycle_length[0] != 0 && cycle_length != p_decimal_details->cycle_length[0] && cycle_length % p_decimal_details->cycle_length[0] == 0) {
-                    // printf("cycle_length:%d, i: %d, j: %d, the min cycle_length is:%d.\n", cycle_length, i, j, p_decimal_details->cycle_length[0]);
-                    break;
-                }
-                if (p_decimal_expansion[i+1] != p_decimal_expansion[j+1]) {
-                    printf("cycle_length:%d, i: %d, j: %d, invalid cycle_length:%d!\n", cycle_length, i, j, cycle_length);
-                    break;
-                }
-                p_decimal_details->cycle_decimals[count][i] = p_decimal_expansion[i];
-                p_decimal_details->cycle_length[count] = cycle_length;
-                printf("cycle_length:%d, i: %d, j: %d, first: %d, second: %d, p_decimal_details->cycle_length[0]: %d\n", cycle_length, i, j, p_decimal_expansion[i], p_decimal_expansion[j], p_decimal_details->cycle_length[0]);
-            } else {
-                // printf("cycle_length:%d, i: %d, j: %d, invalid cycle length.\n", cycle_length, i, j);
-                break;
-            }
-        }
         if (should_quit) {
             break;
         }
-        if (p_decimal_details->cycle_length[count] != 0) {
-            count++;
+        for(b = 0; b < max_cycle_length - cycle_length; b++) {
+            if (should_quit) {
+                break;
+            }
+            for (i = b, j = i + cycle_length; i < cycle_length + b, j < 2 * cycle_length + b; i++, j++) {
+                if (p_decimal_expansion[i] == p_decimal_expansion[j]) {
+                    int all_equals = check_all_elements_equal(&p_decimal_expansion[i], max_cycle_length - i);
+                    if (all_equals == 0) {
+                        printf("cycle_length:%d, i: %d, j: %d, all equals!\n", cycle_length, i, j);
+                        p_decimal_details->cycle_decimals[count][p_decimal_details->cycle_length[count]] = p_decimal_expansion[i];
+                        p_decimal_details->cycle_length[count] = 1;
+                        count++;
+                        should_quit = 1;
+                        break;
+                    }
+                    if (p_decimal_details->cycle_length[0] != 0 && cycle_length != p_decimal_details->cycle_length[0] && (cycle_length % p_decimal_details->cycle_length[0] == 0)) {
+                        // printf("cycle_length:%d, i: %d, j: %d, the min cycle_length is:%d (1).\n", cycle_length, i, j, p_decimal_details->cycle_length[0]);
+                        break;
+                    }
+                    if (p_decimal_expansion[i+1] != p_decimal_expansion[j+1]) {
+                        // printf("cycle_length:%d, b:%d, i: %d, j: %d, invalid cycle_length:%d!\n", cycle_length, b, i, j, cycle_length);
+                        break;
+                    }
+                    if (p_decimal_details->cycle_length[0] != 0 && b != p_decimal_details->begins_at && (cycle_length % p_decimal_details->cycle_length[0] == 0)) {
+                        // printf("cycle_length:%d, i: %d, j: %d, the min cycle_length is:%d (2).\n", cycle_length, i, j, p_decimal_details->cycle_length[0]);
+                        break;
+                    }
+                    p_decimal_details->cycle_decimals[count][i-b] = p_decimal_expansion[i];
+                    p_decimal_details->cycle_length[count] = cycle_length;
+                    p_decimal_details->begins_at = b;
+                    // printf("cycle_length:%d, b: %d, i: %d, j: %d, count:%d, first: %d, second: %d, p_decimal_details->cycle_length[0]: %d\n", cycle_length, b, i, j, count, p_decimal_expansion[i], p_decimal_expansion[j], p_decimal_details->cycle_length[0]);
+                } else {
+                    // printf("cycle_length:%d, b: %d, i: %d, j: %d, invalid cycle length.\n", cycle_length, b, i, j);
+                    break;
+                }
+            }
+            if (p_decimal_details->cycle_length[count] != 0) {
+                count++;
+            }
         }
     }
 }
