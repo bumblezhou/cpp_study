@@ -36,12 +36,12 @@ void get_decimal_expansion(int *arr, int devident, int devisor, int decimal_plac
     int mod = devident % devisor;
     int int_part = ((devident - mod) / devisor);
     arr[decimal_place-1] = int_part;
-    double next_decimal = d10 - int_part;
+    // double next_decimal = d10 - int_part;
     // = [devident / devisor - int_part]
     // = [devident / devisor - ((devident - mod) / devisor)]
     // = mod / devisor
     // = devident % devisor / devisor
-    double next_decimal1 = (devident % devisor) / (double)devisor;
+    // double next_decimal1 = (devident % devisor) / (double)devisor;
     // printf("devident:%d, devisor:%d, mod: %d, d10:%f, decimal_place:%d, int_part:%d, next_decimal:%f, next_decimal1:%f, arr[0]:%d\n", devident, devisor, mod, d10, decimal_place, int_part, next_decimal, next_decimal1, arr[0]);
     // printf("next_devident:%d, next_devisor:%d\n", (devident % devisor), devisor);
     get_decimal_expansion(arr, (devident % devisor), devisor, (decimal_place + 1), limit);
@@ -131,7 +131,7 @@ void get_decimal_details(const int * p_decimal_expansion, int size, struct decim
 
 int main()
 {
-    int devident = 7, devisor = 43;
+    int devident = 5, devisor = 7;
     int quotient = devident/devisor;
     
     int decimal_expansion[EXPANSION_SIZE] = {0};
