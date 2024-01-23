@@ -26,11 +26,10 @@ void get_decimal_expansion(int *arr, int devident, int devisor, int decimal_plac
     int i = 0;
     while (devident < devisor) {
         devident *= 10;
-        arr[i] = 0;
         i++;
     }
     if (i > 0) {
-        decimal_place += i;    
+        decimal_place += i;
     }
 
     double d10 = (double)devident / devisor;
@@ -43,7 +42,7 @@ void get_decimal_expansion(int *arr, int devident, int devisor, int decimal_plac
     // = mod / devisor
     // = devident % devisor / devisor
     double next_decimal1 = (devident % devisor) / (double)devisor;
-    // printf("devident:%d, devisor:%d, mod: %d, d10:%f, decimal_place:%d, int_part:%d, next_decimal:%f, next_decimal1:%f\n", devident, devisor, mod, d10, decimal_place, int_part, next_decimal, next_decimal1);
+    // printf("devident:%d, devisor:%d, mod: %d, d10:%f, decimal_place:%d, int_part:%d, next_decimal:%f, next_decimal1:%f, arr[0]:%d\n", devident, devisor, mod, d10, decimal_place, int_part, next_decimal, next_decimal1, arr[0]);
     // printf("next_devident:%d, next_devisor:%d\n", (devident % devisor), devisor);
     get_decimal_expansion(arr, (devident % devisor), devisor, (decimal_place + 1), limit);
 }
@@ -93,7 +92,7 @@ void get_decimal_details(const int * p_decimal_expansion, int size, struct decim
                 if (p_decimal_expansion[i] == p_decimal_expansion[j]) {
                     int all_equals = check_all_elements_equal(&p_decimal_expansion[i], max_cycle_length - i);
                     if (all_equals == 0) {
-                        printf("cycle_length:%d, i: %d, j: %d, all equals!\n", cycle_length, i, j);
+                        // printf("cycle_length:%d, i: %d, j: %d, all equals!\n", cycle_length, i, j);
                         p_decimal_details->cycle_decimals[count][p_decimal_details->cycle_length[count]] = p_decimal_expansion[i];
                         p_decimal_details->cycle_length[count] = 1;
                         count++;
@@ -132,7 +131,7 @@ void get_decimal_details(const int * p_decimal_expansion, int size, struct decim
 
 int main()
 {
-    int devident = 5, devisor = 43;
+    int devident = 7, devisor = 43;
     int quotient = devident/devisor;
     
     int decimal_expansion[EXPANSION_SIZE] = {0};
