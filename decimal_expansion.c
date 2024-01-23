@@ -91,7 +91,11 @@ void get_decimal_details(const int * p_decimal_expansion, int size, struct decim
             if (quit_begins_move) {
                 break;
             }
+            if (p_decimal_expansion[b] == 0) {
+                continue;
+            }
             for (i = b, j = i + cycle_length; i < cycle_length + b, j < 2 * cycle_length + b; i++, j++) {
+                
                 if (p_decimal_expansion[i] == p_decimal_expansion[j]) {
                     int all_equals = check_all_elements_equal(&p_decimal_expansion[i], max_cycle_length - i);
                     if (all_equals == 0) {
@@ -104,6 +108,7 @@ void get_decimal_details(const int * p_decimal_expansion, int size, struct decim
                     }
                     if (p_decimal_details->cycle_length[0] != 0 && cycle_length != p_decimal_details->cycle_length[0] && (cycle_length % p_decimal_details->cycle_length[0] == 0)) {
                         // printf("cycle_length:%d, i: %d, j: %d, the min cycle_length is:%d (1).\n", cycle_length, i, j, p_decimal_details->cycle_length[0]);
+                        // quit_all = 1;
                         break;
                     }
                     if (p_decimal_expansion[i+1] != p_decimal_expansion[j+1]) {
@@ -111,14 +116,14 @@ void get_decimal_details(const int * p_decimal_expansion, int size, struct decim
                         break;
                     }
                     if (p_decimal_details->cycle_length[0] != 0 && b != p_decimal_details->begins_at && (cycle_length % p_decimal_details->cycle_length[0] == 0)) {
-                        // printf("cycle_length:%d, i: %d, j: %d, the min cycle_length is:%d (2).\n", cycle_length, i, j, p_decimal_details->cycle_length[0]);
+                        printf("cycle_length:%d, b: %d, i: %d, j: %d, the min cycle_length is:%d (2).\n", cycle_length, b, i, j, p_decimal_details->cycle_length[0]);
                         quit_begins_move = 1;
                         break;
                     }
                     p_decimal_details->cycle_decimals[count][i-b] = p_decimal_expansion[i];
                     p_decimal_details->cycle_length[count] = cycle_length;
                     p_decimal_details->begins_at = b;
-                    // printf("cycle_length:%d, b: %d, i: %d, j: %d, count:%d, first: %d, second: %d, p_decimal_details->cycle_length[0]: %d\n", cycle_length, b, i, j, count, p_decimal_expansion[i], p_decimal_expansion[j], p_decimal_details->cycle_length[0]);
+                    printf("cycle_length:%d, b: %d, i: %d, j: %d, count:%d, first: %d, second: %d, p_decimal_details->cycle_length[0]: %d\n", cycle_length, b, i, j, count, p_decimal_expansion[i], p_decimal_expansion[j], p_decimal_details->cycle_length[0]);
                 } else {
                     // printf("cycle_length:%d, b: %d, i: %d, j: %d, invalid cycle length.\n", cycle_length, b, i, j);
                     break;
@@ -135,7 +140,7 @@ void get_decimal_details(const int * p_decimal_expansion, int size, struct decim
 
 int main()
 {
-    int devident = 5, devisor = 43;
+    int devident = 5, devisor = 43000;
     int quotient = devident/devisor;
     
     int decimal_expansion[EXPANSION_SIZE] = {0};
