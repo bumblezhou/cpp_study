@@ -19,12 +19,21 @@ void get_decimal_expansion(int *arr, int devident, int devisor, int decimal_plac
     }
     
     while (devident > devisor) {
+        // printf("dead loop! 1\n");
         devident = devident % devisor;
     }
+    
     devident = 10 * devident;
+    
+    if (devident == 0) {
+        // printf("exit devident == 0\n");
+        arr[0] = 0;
+        return;
+    }
 
     int i = 0;
     while (devident < devisor) {
+        // printf("dead loop! 2\n");
         devident *= 10;
         i++;
     }
@@ -36,13 +45,18 @@ void get_decimal_expansion(int *arr, int devident, int devisor, int decimal_plac
     int mod = devident % devisor;
     int int_part = ((devident - mod) / devisor);
     arr[decimal_place-1] = int_part;
+    if (mod == 0) {
+        arr[0] = 0;
+        // printf("exit mod == 0\n");
+        return;
+    }
     // double next_decimal = d10 - int_part;
     // = [devident / devisor - int_part]
     // = [devident / devisor - ((devident - mod) / devisor)]
     // = mod / devisor
     // = devident % devisor / devisor
     // double next_decimal1 = (devident % devisor) / (double)devisor;
-    // printf("devident:%d, devisor:%d, mod: %d, d10:%f, decimal_place:%d, int_part:%d, next_decimal:%f, next_decimal1:%f, arr[0]:%d\n", devident, devisor, mod, d10, decimal_place, int_part, next_decimal, next_decimal1, arr[0]);
+    // printf("devident:%d, devisor:%d, mod: %d, d10:%f, decimal_place:%d, int_part:%d, arr[0]:%d\n", devident, devisor, mod, d10, decimal_place, int_part, arr[0]);
     // printf("next_devident:%d, next_devisor:%d\n", (devident % devisor), devisor);
     get_decimal_expansion(arr, (devident % devisor), devisor, (decimal_place + 1), limit);
 }
@@ -92,10 +106,18 @@ void get_decimal_details(const int * p_decimal_expansion, int size, struct decim
                 break;
             }
             if (p_decimal_expansion[b] == 0) {
+                int all_equals = check_all_elements_equal(&p_decimal_expansion[b], max_cycle_length - b);
+                // printf("b: %d, all_equals: %d, max_cycle_length: %d, ignore to get decimal cycle length.\n", b, all_equals, max_cycle_length);
+                if (all_equals == 0) {
+                    p_decimal_details->cycle_decimals[count][p_decimal_details->cycle_length[count]] = 0;
+                    p_decimal_details->cycle_length[count] = 1;
+                    p_decimal_details->begins_at = b;
+                    quit_all = 1;
+                    break;
+                }
                 continue;
             }
             for (i = b, j = i + cycle_length; i < cycle_length + b, j < 2 * cycle_length + b; i++, j++) {
-                
                 if (p_decimal_expansion[i] == p_decimal_expansion[j]) {
                     int all_equals = check_all_elements_equal(&p_decimal_expansion[i], max_cycle_length - i);
                     if (all_equals == 0) {
@@ -108,7 +130,6 @@ void get_decimal_details(const int * p_decimal_expansion, int size, struct decim
                     }
                     if (p_decimal_details->cycle_length[0] != 0 && cycle_length != p_decimal_details->cycle_length[0] && (cycle_length % p_decimal_details->cycle_length[0] == 0)) {
                         // printf("cycle_length:%d, i: %d, j: %d, the min cycle_length is:%d (1).\n", cycle_length, i, j, p_decimal_details->cycle_length[0]);
-                        // quit_all = 1;
                         break;
                     }
                     if (p_decimal_expansion[i+1] != p_decimal_expansion[j+1]) {
@@ -140,7 +161,7 @@ void get_decimal_details(const int * p_decimal_expansion, int size, struct decim
 
 int main()
 {
-    int devident = 5, devisor = 43000;
+    int devident = 1, devisor = 250;
     int quotient = devident/devisor;
     
     int decimal_expansion[EXPANSION_SIZE] = {0};
@@ -151,12 +172,6 @@ int main()
     
     struct decimal_details dd = {0};
     get_decimal_details(decimal_expansion, EXPANSION_SIZE, &dd);
-    
-    // int test[10] = {0,0,1,1,1,1,1,1,1,1};
-    // int result1 = check_all_elements_equal(&test[0], 8);
-    // printf("equals? %d\n", result1);
-    // int result2 = check_all_elements_equal(&test[2], 8);
-    // printf("equals? %d\n", result2);
     
     print_decimal_details(&dd);
     return 0;
