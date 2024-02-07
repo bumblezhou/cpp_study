@@ -23,6 +23,12 @@ struct othello_board {
     char current_player;
 };
 
+struct move {
+    int row, column;
+    Direction d;
+    struct place original_place;
+};
+
 struct scores {
     int white_score, black_score;
 };
@@ -111,7 +117,7 @@ int is_next_to_enemy_in_direction(Direction d, struct othello_board * p_board, s
     return result;
 }
 
-void get_possible_move_in_a_direction(Direction d, struct othello_board * p_board, struct place * p_place, char rivals_disk, struct place * p_possible_moves, int * p_total_count) {
+void get_possible_move_in_a_direction(Direction d, struct othello_board * p_board, struct place * p_place, char rivals_disk, struct move * p_possible_moves, int * p_total_count) {
     int i, j;
     if (d == Top) {
         j = p_place->column - 1;
@@ -123,6 +129,9 @@ void get_possible_move_in_a_direction(Direction d, struct othello_board * p_boar
             } else if (p_board->places[i][j].disk == '-') {
                 p_possible_moves[*p_total_count].row = p_board->places[i][j].row;
                 p_possible_moves[*p_total_count].column = p_board->places[i][j].column;
+                p_possible_moves[*p_total_count].d = Top;
+                p_possible_moves[*p_total_count].original_place.row = p_place->row;
+                p_possible_moves[*p_total_count].original_place.column = p_place->column;
                 (*p_total_count) += 1;
                 break;
             }
@@ -136,6 +145,9 @@ void get_possible_move_in_a_direction(Direction d, struct othello_board * p_boar
             } else {
                 p_possible_moves[*p_total_count].row = p_board->places[i][j].row;
                 p_possible_moves[*p_total_count].column = p_board->places[i][j].column;
+                p_possible_moves[*p_total_count].original_place.row = p_place->row;
+                p_possible_moves[*p_total_count].original_place.column = p_place->column;
+                p_possible_moves[*p_total_count].d = TopRight;
                 (*p_total_count) += 1;
                 break;
             }
@@ -150,6 +162,9 @@ void get_possible_move_in_a_direction(Direction d, struct othello_board * p_boar
             } else {
                 p_possible_moves[*p_total_count].row = p_board->places[i][j].row;
                 p_possible_moves[*p_total_count].column = p_board->places[i][j].column;
+                p_possible_moves[*p_total_count].original_place.row = p_place->row;
+                p_possible_moves[*p_total_count].original_place.column = p_place->column;
+                p_possible_moves[*p_total_count].d = Right;
                 (*p_total_count) += 1;
                 break;
             }
@@ -163,6 +178,9 @@ void get_possible_move_in_a_direction(Direction d, struct othello_board * p_boar
             } else {
                 p_possible_moves[*p_total_count].row = p_board->places[i][j].row;
                 p_possible_moves[*p_total_count].column = p_board->places[i][j].column;
+                p_possible_moves[*p_total_count].original_place.row = p_place->row;
+                p_possible_moves[*p_total_count].original_place.column = p_place->column;
+                p_possible_moves[*p_total_count].d = BottomRight;
                 (*p_total_count) += 1;
                 break;
             }
@@ -177,6 +195,9 @@ void get_possible_move_in_a_direction(Direction d, struct othello_board * p_boar
             } else {
                 p_possible_moves[*p_total_count].row = p_board->places[i][j].row;
                 p_possible_moves[*p_total_count].column = p_board->places[i][j].column;
+                p_possible_moves[*p_total_count].original_place.row = p_place->row;
+                p_possible_moves[*p_total_count].original_place.column = p_place->column;
+                p_possible_moves[*p_total_count].d = Bottom;
                 (*p_total_count) += 1;
                 break;
             }
@@ -190,6 +211,9 @@ void get_possible_move_in_a_direction(Direction d, struct othello_board * p_boar
             } else {
                 p_possible_moves[*p_total_count].row = p_board->places[i][j].row;
                 p_possible_moves[*p_total_count].column = p_board->places[i][j].column;
+                p_possible_moves[*p_total_count].original_place.row = p_place->row;
+                p_possible_moves[*p_total_count].original_place.column = p_place->column;
+                p_possible_moves[*p_total_count].d = BottomLeft;
                 (*p_total_count) += 1;
                 break;
             }
@@ -204,6 +228,9 @@ void get_possible_move_in_a_direction(Direction d, struct othello_board * p_boar
             } else {
                 p_possible_moves[*p_total_count].row = p_board->places[i][j].row;
                 p_possible_moves[*p_total_count].column = p_board->places[i][j].column;
+                p_possible_moves[*p_total_count].original_place.row = p_place->row;
+                p_possible_moves[*p_total_count].original_place.column = p_place->column;
+                p_possible_moves[*p_total_count].d = Left;
                 (*p_total_count) += 1;
                 break;
             }
@@ -217,6 +244,9 @@ void get_possible_move_in_a_direction(Direction d, struct othello_board * p_boar
             } else {
                 p_possible_moves[*p_total_count].row = p_board->places[i][j].row;
                 p_possible_moves[*p_total_count].column = p_board->places[i][j].column;
+                p_possible_moves[*p_total_count].original_place.row = p_place->row;
+                p_possible_moves[*p_total_count].original_place.column = p_place->column;
+                p_possible_moves[*p_total_count].d = TopLeft;
                 (*p_total_count) += 1;
                 break;
             }
@@ -225,13 +255,13 @@ void get_possible_move_in_a_direction(Direction d, struct othello_board * p_boar
 }
 
 int compare(const void *a, const void *b) {
-    struct place *p_place_a = (struct place *)a;
-    struct place *p_place_b = (struct place *)b;
+    struct move *p_place_a = (struct move *)a;
+    struct move *p_place_b = (struct move *)b;
     return (p_place_a->row == p_place_b->row ? p_place_a->column - p_place_b->column : p_place_a->row - p_place_b->row);
 }
 
-void print_possible_moves(struct place * p_possible_moves, int size) {
-    qsort(p_possible_moves, size, sizeof(struct place), compare);
+void print_possible_moves(struct move * p_possible_moves, int size) {
+    qsort(p_possible_moves, size, sizeof(struct move), compare);
     int i;
     for (i = 0; i < size; i++) {
         if (p_possible_moves[i].row == 0 || p_possible_moves[i].column == 0) {
@@ -247,7 +277,7 @@ char get_rivals_disk(char current_players_disk) {
     return rivals_disk;
 }
 
-void get_possible_moves_around_a_place(struct othello_board * p_board, struct place * p_place, struct place * p_possible_moves, int * p_total_count) {
+void get_possible_moves_around_a_place(struct othello_board * p_board, struct place * p_place, struct move * p_possible_moves, int * p_total_count) {
     char rivals_disk = get_rivals_disk(p_place->disk);
     // top direction
     int ret1 = is_next_to_enemy_in_direction(Top, p_board, p_place, rivals_disk);
@@ -291,7 +321,7 @@ void get_possible_moves_around_a_place(struct othello_board * p_board, struct pl
     }
 }
 
-void get_possible_moves(struct othello_board * p_board, struct place * p_possible_moves) {
+void get_possible_moves(struct othello_board * p_board, struct move * p_possible_moves) {
     int i, j, row = 8, column = 8, p = 0, total_count = 0;
     for (i = 0; i < row; i++) {
         for (j = 0; j < column; j++) {
@@ -320,13 +350,17 @@ void get_scores(struct othello_board * p_board, struct scores * p_scores) {
     }
 }
 
+// void do_move(struct board * p_board, struct move * p_move) {
+    
+// }
+
 int main()
 {
     struct othello_board board = {0};
     init_board(8, 8, input_board_lines_1, 'W', &board);
     print_board(&board);
     printf("L\n");
-    struct place possible_moves[32];
+    struct move possible_moves[32];
     memset(possible_moves, 0, sizeof(possible_moves));
     get_possible_moves(&board, possible_moves);
     print_possible_moves(possible_moves, 32);
