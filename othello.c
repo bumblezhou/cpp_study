@@ -23,6 +23,10 @@ struct othello_board {
     char current_player;
 };
 
+struct scores {
+    int white_score, black_score;
+};
+
 char input_board_lines_1[8][8] = {
     {"--------"},
     {"--------"},
@@ -302,6 +306,20 @@ void get_possible_moves(struct othello_board * p_board, struct place * p_possibl
     }
 }
 
+void get_scores(struct othello_board * p_board, struct scores * p_scores) {
+    int i, j, row = 8, column = 8;
+    for (i = 0; i < row; i++) {
+        for (j = 0; j < column; j++) {
+            if (p_board->places[i][j].disk == 'W') {
+                p_scores->white_score++;
+            }
+            if (p_board->places[i][j].disk == 'B') {
+                p_scores->black_score++;
+            } 
+        }
+    }
+}
+
 int main()
 {
     struct othello_board board = {0};
@@ -315,6 +333,9 @@ int main()
     printf("M35\n");
     board.places[3-1][5-1].disk = board.current_player;
     board.current_player = get_rivals_disk(board.current_player);
+    struct scores current_scores = {0};
+    get_scores(&board, &current_scores);
+    printf("Black - %d White - %d\n", current_scores.black_score, current_scores.white_score);
     print_board(&board);
     printf("L\n");
     memset(possible_moves, 0, sizeof(possible_moves));
