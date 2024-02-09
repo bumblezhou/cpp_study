@@ -68,9 +68,24 @@ vector<string> input_morse_codes = {
     "---- ..--"
 };
 
-// vector<vector<set<char>>> get_raw_matched_words(const string &morse_code_line) {
-
-// }
+vector<set<char>> get_raw_matched_words(const string &morse_code_line) {
+    int i, j, line_len = morse_code_line.length();
+    vector<set<char>> possible_char_list;
+    for(i = 0; i < line_len; i++) {
+        set<char> possible_char;
+        for (j = i; j < line_len - i; j++) {
+            string temp = morse_code_line.substr(i, j);
+            for (auto it = morse_code_mappings.begin(); it != morse_code_mappings.end(); ++it) {
+                if (it->second == temp) {
+                    possible_char.insert(it->first);
+                    break;
+                }
+            }
+        }
+        possible_char_list.push_back(possible_char);
+    }
+    return possible_char_list;
+}
 
 int main()
 {
