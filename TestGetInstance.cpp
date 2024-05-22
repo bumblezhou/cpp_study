@@ -2,6 +2,7 @@
 #include <memory>
 #include <thread>
 #include <chrono>
+#include <vector>
 
 using namespace std;
 using namespace std::chrono_literals;
@@ -23,8 +24,20 @@ class TestClass {
     static std::unique_ptr<TestClass> test_class_inst;
     int a,b;
 };
-
 std::unique_ptr<TestClass> TestClass::test_class_inst = nullptr;
+
+class Singleton {
+public:
+    static Singleton* getInstance() {
+        static Singleton instance;
+        return &instance;
+    }
+
+private:
+    Singleton() {} // Private constructor to prevent instantiation
+    Singleton(const Singleton&) = delete; // Delete copy constructor
+    Singleton& operator=(const Singleton&) = delete; // Delete assignment operator
+};
 
 void thread_task() {
     auto inst1 = TestClass::getInstance();
@@ -32,28 +45,31 @@ void thread_task() {
     cout << "thread:" << this_id << "->" << inst1 << endl;
 }
 
+void thread_task2() {
+    auto inst2 = Singleton::getInstance();
+    std::thread::id this_id = std::this_thread::get_id();
+    cout << "thread:" << this_id << "->" << inst2 << endl;
+}
+
 int main()
 {
-    std::thread t1(thread_task);
-    std::thread t2(thread_task);
-    std::thread t3(thread_task);
-    std::thread t4(thread_task);
-    std::thread t5(thread_task);
-    
-    t1.join();
-    t2.join();
-    t3.join();
-    t4.join();
-    t5.join();
-    
-    // auto inst1 = TestClass::getInstance();
-    // cout << inst1 << endl;
-    
-    // auto inst2 = TestClass::getInstance();
-    // cout << inst2 << endl;
-    
-    // auto inst3 = TestClass::getInstance();
-    // cout << inst3 << endl;
+    // std::vector<std::thread> thread_list1;
+    // for (int i = 0; i < 20; i++) {
+    //     thread_list1.push_back(std::thread(thread_task));
+    // }
+
+    // for (int i = 0; i < 20; i++) {
+    //     thread_list1[i].join();
+    // }
+
+    std::vector<std::thread> thread_list2;
+    for (int i = 0; i < 20; i++) {
+        thread_list2.push_back(std::thread(thread_task2));
+    }
+
+    for (int i = 0; i < 20; i++) {
+        thread_list2[i].join();
+    }
 
     return 0;
 }
