@@ -28,9 +28,9 @@ std::unique_ptr<TestClass> TestClass::test_class_inst = nullptr;
 
 class Singleton {
 public:
-    static Singleton* getInstance() {
+    static Singleton& getInstance() {
         static Singleton instance;
-        return &instance;
+        return instance;
     }
 
 private:
@@ -46,9 +46,8 @@ void thread_task() {
 }
 
 void thread_task2() {
-    auto inst2 = Singleton::getInstance();
     std::thread::id this_id = std::this_thread::get_id();
-    cout << "thread:" << this_id << "->" << inst2 << endl;
+    cout << "thread:" << this_id << "->" << &Singleton::getInstance() << endl;
 }
 
 int main()
