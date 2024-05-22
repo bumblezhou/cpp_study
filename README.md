@@ -29,3 +29,8 @@ g++ TestGetInstance.cpp -o TestGetInstance -std=c++14 -lpthread
 ``` c++
 g++ TestLifeCircle.cpp -o TestLifeCircle -std=c++14 -lpthread
 ```
+
+## Copy constructor and copy assignment
+``` c++
+g++ copy_constructor_assignment.cpp -o copy_constructor_assignment -std=c++14
+```
