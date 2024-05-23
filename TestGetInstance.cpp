@@ -37,6 +37,7 @@ private:
     Singleton() {} // Private constructor to prevent instantiation
     Singleton(const Singleton&) = delete; // Delete copy constructor
     Singleton& operator=(const Singleton&) = delete; // Delete assignment operator
+    ~Singleton() {} // Private destructor to prevent delete by others
 };
 
 void thread_task() {
