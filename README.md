@@ -56,3 +56,8 @@ g++ leveldb_test.cpp -o leveldb_test -std=c++14 -lleveldb
 ``` c++
 g++ FactorySingletonTest.cpp -o FactorySingletonTest -std=c++14 -lpthread
 ```
+
+## Observer pattern
+``` c++
+g++ ObserverPattern.cpp -o ObserverPattern -std=c++14
+```
