@@ -58,8 +58,10 @@ int main()
     //     thread_list1.push_back(std::thread(thread_task));
     // }
 
-    // for (int i = 0; i < 20; i++) {
-    //     thread_list1[i].join();
+    // for (auto& thread : thread_list1) {
+    //     if (thread.joinable()) {
+    //         thread.join(); // Join or detach threads as needed
+    //     }
     // }
 
     std::vector<std::thread> thread_list2;
@@ -67,8 +69,10 @@ int main()
         thread_list2.push_back(std::thread(thread_task2));
     }
 
-    for (int i = 0; i < 20; i++) {
-        thread_list2[i].join();
+    for (auto& thread : thread_list2) {
+        if (thread.joinable()) {
+            thread.join(); // Join or detach threads as needed
+        }
     }
 
     return 0;

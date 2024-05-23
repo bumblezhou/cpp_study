@@ -51,3 +51,8 @@ leveldbutil --version
 ``` c++
 g++ leveldb_test.cpp -o leveldb_test -std=c++14 -lleveldb
 ```
+
+## Factory singleton test
+``` c++
+g++ FactorySingletonTest.cpp -o FactorySingletonTest -std=c++14 -lpthread
+```
