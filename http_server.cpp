@@ -2,6 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <unordered_map>
 #include <unistd.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -20,6 +21,31 @@ std::string readFile(const std::string& filename) {
     std::ostringstream oss;
     oss << file.rdbuf();
     return oss.str();
+}
+
+// Function to get MIME type based on file extension
+std::string getMimeType(const std::string& filename) {
+    static const std::unordered_map<std::string, std::string> mimeTypes = {
+        {".html", "text/html"},
+        {".htm", "text/html"},
+        {".css", "text/css"},
+        {".js", "application/javascript"},
+        {".jpg", "image/jpeg"},
+        {".jpeg", "image/jpeg"},
+        {".png", "image/png"},
+        {".gif", "image/gif"},
+        {".txt", "text/plain"},
+    };
+
+    auto pos = filename.find_last_of('.');
+    if (pos != std::string::npos) {
+        std::string extension = filename.substr(pos);
+        auto it = mimeTypes.find(extension);
+        if (it != mimeTypes.end()) {
+            return it->second;
+        }
+    }
+    return "application/octet-stream"; // Default MIME type
 }
 
 // Function to handle HTTP requests
@@ -62,7 +88,7 @@ void handleRequest(int clientSocket, const std::string& rootDir) {
     } else {
         response << "HTTP/1.1 200 OK\r\n";
         response << "Content-Length: " << fileContent.size() << "\r\n";
-        response << "Content-Type: text/plain\r\n\r\n";
+        response << "Content-Type: " << getMimeType(fullPath) << "\r\n\r\n";
         response << fileContent;
     }
 
