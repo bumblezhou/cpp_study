@@ -42,3 +42,12 @@ sudo apt update && sudo apt install sqlite3 libsqlite3-dev -y
 ``` c++
 g++ sqlite_test.cpp -o sqlite_test -std=c++14 -lsqlite3
 ```
+
+## LevelDB test
+```bash
+sudo apt update && sudo apt install libleveldb-dev -y
+leveldbutil --version
+```
+``` c++
+g++ leveldb_test.cpp -o leveldb_test -std=c++14 -lleveldb
+```
