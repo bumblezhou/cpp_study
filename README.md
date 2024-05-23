@@ -66,3 +66,15 @@ g++ ObserverPattern.cpp -o ObserverPattern -std=c++14
 ``` c++
 g++ ProduceConsume.cpp -o ProduceConsume -std=c++14 -lpthread
 ```
+
+## HTTP server
+1. Build
+``` c++
+g++ http_server.cpp -o http_server -std=c++17
+```
+2. Run
+```bash
+./http_server 8080 ./
+```
+[browser]
+http://localhost:8080/README.md
