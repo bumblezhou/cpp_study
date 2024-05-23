@@ -34,3 +34,11 @@ g++ TestLifeCircle.cpp -o TestLifeCircle -std=c++14 -lpthread
 ``` c++
 g++ copy_constructor_assignment.cpp -o copy_constructor_assignment -std=c++14
 ```
+
+## Sqlite3 test
+```bash
+sudo apt update && sudo apt install sqlite3 libsqlite3-dev -y
+```
+``` c++
+g++ sqlite_test.cpp -o sqlite_test -std=c++14 -lsqlite3
+```
