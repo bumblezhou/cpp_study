@@ -77,4 +77,4 @@ g++ http_server.cpp -o http_server -std=c++17
 ./http_server 8080 ./
 ```
 [browser]
-http://localhost:8080/README.md
+http://localhost:8080/static/test.html
