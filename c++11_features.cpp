@@ -121,6 +121,10 @@ int main() {
         cout << "point(x:" << point.x << ", y:" << point.y << ")" << endl;
     }
 
+    // 7.1. Aggregate member initializers:
+    Point p = { .x = 10, .y = 20 };
+    Point p1 = { 0, 20 };
+
     // 8. constexpr:
     constexpr int result = square(25);
     cout << "result of square(25):" << result << endl;
@@ -169,7 +173,7 @@ int main() {
     // 11. Static assertions (static_assert):
     const Color test_color = Color::Red;
     static_assert(sizeof(int) == 4, "int must be 4 bytes");
-    static_assert(test_color == Color::Red, "myColor is not Blue");
+    static_assert(test_color == Color::Red, "test_color must be Red.");
 
     // 12. Variadic templates:
     print("hello", 1, 2, 3, " ", "world:", 3.1514926);

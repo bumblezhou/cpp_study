@@ -88,3 +88,13 @@ g++ c++11_features.cpp -o c++11_features -std=c++11
 ```bash
 ./c++11_features
 ```
+
+## C++14 features
+1. Build
+``` c++
+g++ c++14_features.cpp -o c++14_features -std=c++14
+```
+2. Run
+```bash
+./c++14_features
+```
