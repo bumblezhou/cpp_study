@@ -78,3 +78,13 @@ g++ http_server.cpp -o http_server -std=c++17
 ```
 [browser]
 http://localhost:8080/static/test.html
+
+## C++11 features
+1. Build
+``` c++
+g++ c++11_features.cpp -o c++11_features -std=c++11
+```
+2. Run
+```bash
+./c++11_features
+```
