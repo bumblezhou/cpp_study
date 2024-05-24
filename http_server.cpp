@@ -58,7 +58,9 @@ void handleRequest(int clientSocket, const std::string& rootDir) {
     buffer[bytesRead] = '\0';
 
     // Parse HTTP request (assuming a simple GET request)
+    // iss content: GET /static/test.html HTTP/1.1
     std::istringstream iss(buffer);
+    
     std::string method, path, version;
     iss >> method >> path >> version;
 
