@@ -110,11 +110,18 @@ g++ c++17_features.cpp -o c++17_features -std=c++17
 ```
 
 ## C++20 features
+1. Prepare
+```bash
+apt search '^g\+\+-[0-9]+$'
+sudo apt update && sudo apt install g++-10 -y
+g++-10 --version
+```
 1. Build
 ``` c++
-g++ c++2a_features.cpp -o c++2a_features -std=c++2a -fconcepts
+g++-10 c++2a_features.cpp -o c++2a_features -std=c++2a -fcoroutines
+g++-10 c++2a_feature_coroutine.cpp -o c++2a_feature_coroutine -std=c++2a -fcoroutines -pthread
 ```
 2. Run
 ```bash
 ./c++2a_features
-```
+./c++2a_feature_coroutine
