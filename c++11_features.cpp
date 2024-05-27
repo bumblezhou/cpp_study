@@ -52,6 +52,47 @@ void print(T&& first, Args&&... args) {
     print(std::forward<Args>(args)...); // Recursively call print with the remaining arguments
 }
 
+class Base {
+public:
+    virtual void mf1() const;
+    virtual void mf2(int x);
+    virtual void mf3() &;
+    virtual void mf4() const;
+};
+
+void Base::mf1() const {
+    cout << "Base::mf1()" << endl;
+}
+void Base::mf2(int x) {
+    cout << "Base::mf2(" << x << ")" << endl;
+}
+void Base::mf3() & {
+    cout << "Base::mf3() &" << endl;
+}
+void Base::mf4() const {
+    cout << "Base::mf4() const" << endl;
+}
+
+class Derived: public Base {
+    virtual void mf1() const override;
+    virtual void mf2(int x) override;
+    virtual void mf3() & override;
+    void mf4() const override;
+};
+
+void Derived::mf1() const {
+    cout << "Derived::mf1()" << endl;
+}
+void Derived::mf2(int x) {
+    cout << "Derived::mf2(" << x << ")" << endl;
+}
+void Derived::mf3() & {
+    cout << "Derived::mf3() &" << endl;
+}
+void Derived::mf4() const {
+    cout << "Derived::mf4() const" << endl;
+}
+
 int main() {
     // 1. auto keyword:
     auto value = 10;
@@ -177,6 +218,13 @@ int main() {
 
     // 12. Variadic templates:
     print("hello", 1, 2, 3, " ", "world:", 3.1514926);
+
+    // 13. override
+    std::unique_ptr<Base> test_obj = make_unique<Derived>();
+    test_obj->mf1();
+    test_obj->mf2(3);
+    test_obj->mf3();
+    test_obj->mf4();
 
     return 0;
 }
