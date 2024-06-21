@@ -10,6 +10,11 @@ g++ binary_search.cpp -o binary_search -std=c++14
 g++ quick_sort.cpp -o quick_sort -std=c++14
 ```
 
+## LinkedList.cpp
+``` c++
+g++ LinkedList.cpp -o LinkedList -std=c++14
+```
+
 ## copy_semantic
 ``` c++
 g++ copy_semantic.cpp -o copy_semantic -std=c++14
