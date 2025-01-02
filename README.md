@@ -70,6 +70,10 @@ g++ ObserverPattern.cpp -o ObserverPattern -std=c++14
 ## Producer-Consumer
 ``` c++
 g++ ProduceConsume.cpp -o ProduceConsume -std=c++14 -lpthread
+
+## Producer-Consumer
+``` c++
+g++ ProducerConsumer.cpp -o ProducerConsumer -std=c++14 -lpthread
 ```
 
 ## HTTP server
